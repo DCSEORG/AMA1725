@@ -95,7 +95,7 @@ public class DummyExpenseService : IExpenseService
                 StatusId = 3,
                 AmountMinor = 1920,
                 Currency = "GBP",
-                ExpenseDate = new DateTime(2023, 21, 18),
+                ExpenseDate = new DateTime(2023, 10, 18),
                 Description = "Transport to conference",
                 SubmittedAt = DateTime.UtcNow.AddDays(-15),
                 ReviewedAt = DateTime.UtcNow.AddDays(-14),
