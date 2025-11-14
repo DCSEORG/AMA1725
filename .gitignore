@@ -1,0 +1,18 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+publish/
+
+# User-specific files
+*.user
+*.userosgen
+*.suo
+*.userprefs
+
+# IDE
+.vs/
+.vscode/
+.idea/
+
+# Do NOT ignore app.zip - needed for deployment
+# !app.zip is already allowed since we don't have *.zip above
