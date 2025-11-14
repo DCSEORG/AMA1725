@@ -1,0 +1,172 @@
+@page
+@model ChatModel
+@{
+    ViewData["Title"] = "GenAI Chat";
+}
+
+<div class="chat-container">
+    <div class="page-header">
+        <h1>GenAI Expense Assistant</h1>
+    </div>
+
+    @if (!Model.IsChatUIEnabled)
+    {
+        <div class="alert alert-warning">
+            <h2>GenAI Chat UI Not Enabled</h2>
+            <p>@ViewData["Message"]</p>
+            <p>To enable the GenAI Chat UI:</p>
+            <ol>
+                <li>Set <code>INCLUDE_CHAT_UI="true"</code> in deploy.sh</li>
+                <li>Redeploy the infrastructure to provision Azure OpenAI resources</li>
+                <li>The chat interface will be available after deployment</li>
+            </ol>
+            <a href="/Index" class="btn btn-primary">Back to Expenses</a>
+        </div>
+    }
+    else
+    {
+        <div class="chat-section">
+            <div class="chat-info">
+                <p>Ask me anything about your expenses using natural language!</p>
+                <p>Examples:</p>
+                <ul>
+                    <li>"Show me all pending expenses"</li>
+                    <li>"What's the total amount of approved expenses?"</li>
+                    <li>"Create a new travel expense for £50"</li>
+                    <li>"List expenses from last month"</li>
+                </ul>
+            </div>
+
+            <div class="chat-history">
+                @if (Model.ChatHistory.Any())
+                {
+                    @foreach (var message in Model.ChatHistory)
+                    {
+                        <div class="chat-message @message.Role">
+                            <div class="message-role">@(message.Role == "user" ? "You" : "AI Assistant"):</div>
+                            <div class="message-content">@message.Content</div>
+                        </div>
+                    }
+                }
+
+                @if (ViewData["Response"] != null)
+                {
+                    <div class="chat-message assistant">
+                        <div class="message-role">AI Assistant:</div>
+                        <div class="message-content">@ViewData["Response"]</div>
+                    </div>
+                }
+
+                @if (ViewData["Error"] != null)
+                {
+                    <div class="alert alert-error">
+                        @ViewData["Error"]
+                    </div>
+                }
+            </div>
+
+            <form method="post" class="chat-form">
+                <div class="chat-input-group">
+                    <textarea id="UserMessage" name="UserMessage" asp-for="UserMessage" 
+                              rows="3" placeholder="Type your message here..." 
+                              class="form-control" required></textarea>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="action-section">
+            <a href="/Index" class="btn btn-secondary">Back to Expenses</a>
+        </div>
+    }
+</div>
+
+<style>
+.alert {
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+}
+
+.alert-error {
+    background-color: #f8d7da;
+    border: 1px solid #dc3545;
+    color: #842029;
+}
+
+.chat-section {
+    background-color: var(--white);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.chat-info {
+    background-color: var(--light-bg);
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+}
+
+.chat-info ul {
+    margin-left: 1.5rem;
+    margin-top: 0.5rem;
+}
+
+.chat-history {
+    min-height: 300px;
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: var(--light-bg);
+}
+
+.chat-message {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border-radius: 4px;
+}
+
+.chat-message.user {
+    background-color: #e3f2fd;
+    margin-left: 20%;
+}
+
+.chat-message.assistant {
+    background-color: #f5f5f5;
+    margin-right: 20%;
+}
+
+.message-role {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.message-content {
+    line-height: 1.6;
+}
+
+.chat-input-group {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+}
+
+.chat-input-group textarea {
+    flex: 1;
+}
+
+.chat-input-group button {
+    flex-shrink: 0;
+}
+</style>

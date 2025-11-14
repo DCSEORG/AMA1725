@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Expense Management System</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a class="navbar-brand" href="/">Expense Management System</a>
+                <div class="nav-links">
+                    <a href="/Index">Expenses</a>
+                    <a href="/AddExpense">Add Expense</a>
+                    <a href="/ApproveExpenses">Approve</a>
+                    <a href="/swagger">API Docs</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    
+    <main role="main" class="main-content">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 - Expense Management System - <a href="/swagger">API Documentation</a></p>
+        </div>
+    </footer>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

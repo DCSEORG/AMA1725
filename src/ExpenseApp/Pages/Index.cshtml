@@ -1,0 +1,65 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Expenses";
+}
+
+<div class="expenses-container">
+    <div class="page-header">
+        <h1>Expenses</h1>
+    </div>
+
+    <div class="filter-section">
+        <form method="get" class="filter-form">
+            <label for="filter">Filter:</label>
+            <input type="text" id="filter" name="filter" value="@Model.FilterText" placeholder="Search expenses..." />
+            <button type="submit" class="btn btn-primary">Search</button>
+            @if (!string.IsNullOrEmpty(Model.FilterText))
+            {
+                <a href="/Index" class="btn btn-secondary">Clear</a>
+            }
+        </form>
+        <a href="/AddExpense" class="btn btn-success">Add Expense</a>
+    </div>
+
+    <div class="expenses-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var expense in Model.Expenses)
+                {
+                    <tr>
+                        <td>@expense.ExpenseDate.ToString("dd/MM/yyyy")</td>
+                        <td>@Model.GetCategoryName(expense.CategoryId)</td>
+                        <td>£@expense.Amount.ToString("F2")</td>
+                        <td>
+                            <span class="status-badge @Model.GetStatusClass(expense.StatusId)">
+                                @Model.GetStatusName(expense.StatusId)
+                            </span>
+                        </td>
+                        <td>@expense.Description</td>
+                    </tr>
+                }
+                @if (!Model.Expenses.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="no-data">No expenses found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="action-section">
+        <a href="/ApproveExpenses" class="btn btn-primary">Approve Expenses</a>
+        <button type="button" class="btn btn-secondary" onclick="window.print()">Save</button>
+    </div>
+</div>
