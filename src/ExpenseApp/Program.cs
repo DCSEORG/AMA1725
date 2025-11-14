@@ -1,5 +1,6 @@
 using ExpenseApp.Data;
 using ExpenseApp.Services;
+using ExpenseApp.Services.GenAI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -45,6 +46,13 @@ else
     
     // Register database service (would need to be implemented)
     // builder.Services.AddScoped<IExpenseService, DatabaseExpenseService>();
+}
+
+// Register GenAI service if enabled
+var includeChatUI = builder.Configuration.GetValue<bool>("IncludeChatUI", false);
+if (includeChatUI)
+{
+    builder.Services.AddScoped<IGenAIExpenseService, GenAIExpenseService>();
 }
 
 var app = builder.Build();
